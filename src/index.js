@@ -16,6 +16,40 @@ const buttonEl = document.querySelector('[type="submit"]');
 
 const pixabayApi = new Pixabay();
 
+const handleLoadMoreBtnClick = async () => {
+  pixabayApi.page += 1;
+  smoothScroll()
+  try {
+    const {data} = await pixabayApi.fetchPhotos();
+
+    if (pixabayApi.page === data.totalHits) {
+      loadMoreBtnEl.classList.add('hidden');
+    }
+
+    galleryListEl.insertAdjacentHTML(
+      'beforeend',
+      createGalleryCards(data.hits)
+    );
+    lightbox.refresh();
+
+    const displayedPhotos = galleryListEl.children.length; 
+    Notiflix.Notify.success(`Hooray! We found ${displayedPhotos} images.`); 
+    if (data.totalHits <= pixabayApi.page * pixabayApi.per_page) {
+      loadMoreBtnEl.classList.add('hidden');
+      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+    } else {
+      loadMoreBtnEl.classList.remove('hidden');
+    }
+  } catch (err) {
+    console.log(err);
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
+  }
+};
+
+
+
 const handleSearchFormSubmit = async event => {
   event.preventDefault();
 
@@ -24,12 +58,11 @@ const handleSearchFormSubmit = async event => {
 
   try {
     const { data } = await pixabayApi.fetchPhotos();
-console.log(data)
     galleryListEl.innerHTML = createGalleryCards(data.hits);
     loadMoreBtnEl.classList.remove('hidden');
     Notiflix.Notify.success(
         `Hooray! We found ${
-          document.querySelectorAll('.photo-card').length
+          document.querySelectorAll('.photo__card').length
         } images.`
       );
     
@@ -42,34 +75,12 @@ console.log(data)
       }
   } catch (err) {
     console.log(err);
+    Notiflix.Notify.info('Sorry, there are no images matching your search query. Please try again.');
    
   }
 };
 
-const handleLoadMoreBtnClick = async () => {
-  pixabayApi.page += 1;
-  smoothScroll()
-  try {
-    const {data} = await pixabayApi.fetchPhotos();
 
-    if (pixabayApi.page === data.totalHits) {
-      loadMoreBtnEl.classList.add('hidden');
-    }
-    galleryListEl.insertAdjacentHTML(
-      'beforeend',
-      createGalleryCards(data.hits)
-    );
-
-    if (data.totalHits <= pixabayApi.page * pixabayApi.per_page) {
-        loadMoreBtnEl.classList.add('hidden');
-        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-      } else {
-        loadMoreBtnEl.classList.remove('hidden');
-      }
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 
 function  createGalleryCards (array) {
@@ -83,19 +94,19 @@ function  createGalleryCards (array) {
           comments,
           downloads,
         }) => {
-          return `<div class="photo-card">
+          return `<div class="photo__card">
            <a class='gallery__link' href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
-           <div class="info">
-             <p class="info-item">
+           <div class="info__card">
+             <p class="info__card-item">
                <b>Likes ${likes}</b>
              </p>
-             <p class="info-item">
+             <p class="info__card-item">
                <b>Views ${views}</b>
              </p>
-             <p class="info-item">
+             <p class="info__card-item">
                <b>Comments ${comments}</b>
              </p>
-             <p class="info-item">
+             <p class="info__card-item">
                <b>Downloads ${downloads}</b>
              </p>
            </div>

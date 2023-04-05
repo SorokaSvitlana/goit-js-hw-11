@@ -1,7 +1,48 @@
+body {
+  background:  linear-gradient(to right, #ff000094, #ffff00, #00ff006e);
+}
 .hidden {
     display: none;
   }
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
+  .search-form {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }  
+
+  .search-form input {
+    min-width: 500px;
+    height: 40px;
+    margin-right: 15px;
+    border-radius: 5px;
+    border: 1px solid royalblue;
+    font-size: 18px;
+    outline: 1px solid royalblue;
+    transition: outline 200ms linear;
+  }
+
+  button {
+      background-color: #007bff; 
+      color: #fff; 
+      border: none; 
+      border-radius: 5px; 
+      padding: 10px 20px; 
+      font-size: 16px; 
+      cursor: pointer; 
+    }
+    
+    button:hover {
+      background-color: #0062cc; 
+      color: #fff; 
+    }
+    
   .gallery {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -12,3 +53,29 @@
     flex-wrap: wrap;
     gap: 30px;
   }
+
+  .info__card {
+    display: flex;
+    padding: 5px;
+    gap: 10px;
+    text-align: center;
+    background-color: rgba(65, 105, 225, 0.212);
+    border: 1px solid gray;
+    border-top: none;
+    border-radius: 0px 0px 5px 5px;
+  }
+
+  .load-button {
+    position: relative;
+    margin-bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+  
+    padding: 10px 25px 10px 25px;
+  }
+
+.photo__card {
+  flex-basis: calc((100% - 30px) / 5);
+  cursor: pointer;
+  transition: scale 200ms linear;
+}
